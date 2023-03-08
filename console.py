@@ -4,7 +4,7 @@ import cmd
 import readline
 
 
-class console(cmd.Cmd):
+class HBNBCommand(cmd.Cmd):
     """a sub class of the cmd.Cmd class
     used to aquire all the necissary methods
     to build a command interpreter"""
@@ -24,4 +24,4 @@ class console(cmd.Cmd):
 
 
 if __name__ == "__main__":
-    console().cmdloop()
+    HBNBCommand().cmdloop()
