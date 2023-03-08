@@ -6,10 +6,19 @@ import uuid
 
 class BaseModel():
     """base class"""
-    def __init__(self, id=None, created_at=None, updated_at=None):
-        self.id = str(uuid.uuid4())
-        self.created_at = datetime.datetime.now()
-        self.updated_at = datetime.datetime.now()
+    def __init__(self, *args, **kwargs):
+        if len(kwargs) != 0:
+            for k,v in kwargs.items():
+                if k == 'created_at':
+                    self.created_at = datetime.datetime.strptime(v, '%Y-%m-%dT%H:%M:%S.%f')
+                elif k == 'updated_at':
+                    self.updated_at = datetime.datetime.strptime(v, '%Y-%m-%dT%H:%M:%S.%f')
+                elif k != '__class__':
+                    setattr(self, k, v)
+        else:
+            self.id = str(uuid.uuid4())
+            self.created_at = datetime.datetime.now()
+            self.updated_at = datetime.datetime.now()
 
     def __str__(self):
         return "[{}] ({})\
@@ -22,7 +31,7 @@ class BaseModel():
         dict_t = self.__dict__
         dict_t.update({
             '__class__': self.__class__.__name__,
-            'created_at': self.created_at.isoformat(),
-            'updated_at': self.updated_at.isoformat()
+            'created_at': self.created_at.strftime('%Y-%m-%dT%H:%M:%S.%f'),
+            'updated_at': self.updated_at.strftime('%Y-%m-%dT%H:%M:%S.%f')
             })
         return dict_t
