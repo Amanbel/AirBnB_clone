@@ -2,4 +2,6 @@
 from base_model import BaseModel
 
 inst = BaseModel()
-print(inst.__str__())
+print(inst)
+print(inst.to_dict())
+
