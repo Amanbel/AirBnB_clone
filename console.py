@@ -77,6 +77,20 @@ class HBNBCommand(cmd.Cmd):
                                 json.dump(dict_all, FILE)
                             return
 
+    def do_all(self, line):
+        if line == 'BaseModel' or line == "":
+            all_list = []
+            try:
+                with open('file.json', 'r') as f:
+                    dicts_all = json.load(f)
+                for k, v in dicts_all.items():
+                    all_list.append(v)
+            except FileNotFoundError:
+                pass
+            print(all_list)
+        else:
+            print("** class doesn't exist **")
+
 
     def do_EOF(self, line=None):
         """the end of line method of Cmd"""
