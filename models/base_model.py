@@ -2,6 +2,7 @@
 """the base class of the project"""
 import datetime
 import uuid
+from models import storage
 
 
 class BaseModel():
@@ -22,6 +23,7 @@ class BaseModel():
             self.id = str(uuid.uuid4())
             self.created_at = datetime.datetime.now()
             self.updated_at = datetime.datetime.now()
+            storage.new(self)  # adds the created object to the dictionary in FileStorage class
 
     def __str__(self):
         """returns a readable string"""
@@ -31,6 +33,7 @@ class BaseModel():
     def save(self):
         """updates the update_at attribute"""
         self.updated_at = datetime.datetime.now()
+        storage.save() # saves the created object dictionary into a json file
 
     def to_dict(self):
         """returns the dictionary form of the instance"""
