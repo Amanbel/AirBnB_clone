@@ -7,12 +7,15 @@ import uuid
 class BaseModel():
     """base class"""
     def __init__(self, *args, **kwargs):
+        """instantiates an object with the values provided"""
         if len(kwargs) != 0:
-            for k,v in kwargs.items():
+            for k, v in kwargs.items():
                 if k == 'created_at':
-                    self.created_at = datetime.datetime.strptime(v, '%Y-%m-%dT%H:%M:%S.%f')
+                    self.created_at = datetime.datetime.strptime(v, '%Y-%m-\
+%dT%H:%M:%S.%f')
                 elif k == 'updated_at':
-                    self.updated_at = datetime.datetime.strptime(v, '%Y-%m-%dT%H:%M:%S.%f')
+                    self.updated_at = datetime.datetime.strptime(v, '%Y-%m-\
+%dT%H:%M:%S.%f')
                 elif k != '__class__':
                     setattr(self, k, v)
         else:
@@ -21,13 +24,16 @@ class BaseModel():
             self.updated_at = datetime.datetime.now()
 
     def __str__(self):
+        """returns a readable string"""
         return "[{}] ({})\
  {}".format(self.__class__.__name__, self.id, self.__dict__)
 
     def save(self):
+        """updates the update_at attribute"""
         self.updated_at = datetime.datetime.now()
 
     def to_dict(self):
+        """returns the dictionary form of the instance"""
         dict_t = self.__dict__
         dict_t.update({
             '__class__': self.__class__.__name__,
