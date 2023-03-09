@@ -10,7 +10,7 @@ else:
 
 
 class Amenity(BaseModel):
-    name = ""
+    name = "olla class attr"
 
     def __init__(self):
         super().__init__()
