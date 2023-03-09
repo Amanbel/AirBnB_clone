@@ -2,8 +2,10 @@
 """the base class of the project"""
 import datetime
 import uuid
-from models import storage
-
+if __name__ == 'base_model':
+    from __init__ import storage
+else:
+    from models import storage
 
 class BaseModel():
     """base class"""

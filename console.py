@@ -3,6 +3,7 @@
 import cmd
 import readline
 import models.base_model as Base
+import models.user as Use
 import json
 import datetime
 import py_func
@@ -19,10 +20,15 @@ class HBNBCommand(cmd.Cmd):
     def do_create(self, line):
         if line == "":
             print("** class name missing **")
-        elif line != 'BaseModel':
+
+        elif line != 'BaseModel' and line != 'User':
             print("** class doesn't exist **")
         elif line == 'BaseModel':
             inst = Base.BaseModel()
+            inst.save()
+            print(inst.id)
+        elif line == 'User':
+            inst = Use.User()
             inst.save()
             print(inst.id)
 
@@ -33,7 +39,7 @@ class HBNBCommand(cmd.Cmd):
         
         cls_id = line.split()
 
-        if cls_id[0] != 'BaseModel':
+        if cls_id[0] != 'BaseModel' and cls_id[0] != 'User':
             print("** class doesn't exist **")
 
         elif len(cls_id) != 2:
@@ -58,7 +64,7 @@ class HBNBCommand(cmd.Cmd):
         else:
             cls_id = line.split()
 
-            if cls_id[0] != 'BaseModel':
+            if cls_id[0] != 'BaseModel' and cls_id[0] != 'User':
                 print("** class doesn't exist **")
             elif len(cls_id) != 2:
                 print("** instance id missing **")
@@ -81,14 +87,19 @@ class HBNBCommand(cmd.Cmd):
                             return
 
     def do_all(self, line):
-        if line == 'BaseModel' or line == "":
-            d = storage.all()
+        if (line == 'BaseModel' or line == 'User') or line == "":
+            try:
+                with open('file.json', 'r') as f:
+                    d = json.load(f)
+            except FileNotFoundError:
+                pass
             if not line:
                 print([str(x) for x in d.values()])
                 return
             else:
-                print([str(v) for v in d.values()
-                    if v.__class__.__name__ == args[0]])
+                args = line.split()
+                print([str(v) for k, v in d.items()
+                    if args[0] in k])
         else:
             print("** class doesn't exist **")
 
@@ -98,11 +109,11 @@ class HBNBCommand(cmd.Cmd):
         else:
             upvar = line.split()
 
-            if upvar[0] != 'BaseModel':
+            if upvar[0] != 'BaseModel' and upvar[0] != 'User':
                 print("** class doesn't exist **")
             elif len(upvar) < 2:
                 print("** instance id missing **")
-            elif upvar[0] == 'BaseModel':
+            elif upvar[0] == 'BaseModel' or upvar[0] == 'User':
                 if len(upvar) < 3:
                     print("** attribute name missing **")
                     return
