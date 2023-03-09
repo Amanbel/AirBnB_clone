@@ -82,15 +82,13 @@ class HBNBCommand(cmd.Cmd):
 
     def do_all(self, line):
         if line == 'BaseModel' or line == "":
-            all_list = []
-            try:
-                with open('file.json', 'r') as f:
-                    dicts_all = json.load(f)
-                for k, v in dicts_all.items():
-                    all_list.append(str(v))
-            except FileNotFoundError:
-                pass
-            print(all_list)
+            d = storage.all()
+            if not line:
+                print([str(x) for x in d.values()])
+                return
+            else:
+                print([str(v) for v in d.values()
+                    if v.__class__.__name__ == args[0]])
         else:
             print("** class doesn't exist **")
 
@@ -105,13 +103,13 @@ class HBNBCommand(cmd.Cmd):
             elif len(upvar) < 2:
                 print("** instance id missing **")
             elif upvar[0] == 'BaseModel':
-                key = "{}.{}".format(upvar[0], upvar[1])
                 if len(upvar) < 3:
                     print("** attribute name missing **")
                     return
                 elif len(upvar) < 4:
                     print("** value missing **")
                 else:
+                    key = "{}.{}".format(upvar[0], upvar[1])
                     try:
                         with open('file.json', 'r') as f:
                             dicts_all = json.load(f)
@@ -120,14 +118,14 @@ class HBNBCommand(cmd.Cmd):
                         return
                     for k, v in dicts_all.items():
                         if k == key:
-                            args = line.split()
                             d = storage.all()
+                            args = line.split()
                             for i in range(len(args[1:]) + 1):
                                 if args[i][0] == '"':
                                     args[i] = args[i].replace('"', "")
-                            key = upvar[0] + '.' + upvar[1]
-                            attr_k = upvar[2]
-                            attr_v = upvar[3]
+                            key = args[0] + '.' + args[1]
+                            attr_k = args[2]
+                            attr_v = args[3]
                             try:
                                 if attr_v.isdigit():
                                     attr_v = int(attr_v)
@@ -135,19 +133,21 @@ class HBNBCommand(cmd.Cmd):
                                     attr_v = float(attr_v)
                             except ValueError:
                                 pass
-                            class_attr = type(d[key]).__dict__
-                            if attr_k in class_attr.keys():
-                                try:
-                                    attr_v = type(class_attr[attr_k])(attr_v)
-                                except Exception:
-                                    print("Entered wrong value type")
-                                    return
-                            print(d[key])
-                            print(type(d[key]))
-                            """
-                            setattr(d[key], attr_k, attr_v)
-                            storage.save()
-                            """
+                            
+
+                            spl = v.split(' ', 2)
+                            dict_str = eval(spl[2])
+                            
+                            dump_dict = json.dumps(dict_str, default=py_func.time_form)
+                            load_dict = json.loads(dump_dict)
+                            load_dict.update({attr_k: attr_v})
+
+                            inst = Base.BaseModel(**load_dict)
+
+                            d[key] = str(inst)
+                            with open('file.json', 'w') as f:
+                                json.dump(d, f)
+                            return
 
     def do_EOF(self, line=None):
         """the end of line method of Cmd"""
