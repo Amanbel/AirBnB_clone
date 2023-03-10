@@ -149,6 +149,8 @@ class HBNBCommand(cmd.Cmd):
                             for i in range(len(args[1:]) + 1):
                                 if args[i][0] == '"':
                                     args[i] = args[i].replace('"', "")
+                                elif args[i][0] == "'":
+                                    args[i] = args[i].replace("'", "")
                             key = args[0] + '.' + args[1]
                             attr_k = args[2]
                             attr_v = args[3]
