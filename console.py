@@ -34,10 +34,23 @@ class HBNBCommand(cmd.Cmd):
 
     def precmd(self, line):
         if '.' in line:
-            for k in dict_cls.keys():
-                if (k in line) and ('all()' in line):
-                    return 'all {}'.format(k)
-            return line
+            if 'all()' in line:
+                al = line.split('.')
+                return 'all {}'.format(al[0])
+            d = {}
+            try:
+                with open('file.json', 'r') as f:
+                    d = json.load(f)
+            except FileNotFoundError:
+                pass
+            if "show" in line:
+                al = line.split('.')
+                alid = al[1].split("\"")
+                for kd in d.keys():
+                    k_d = kd.split('.')
+                    if k_d[0] in line and 'show("{}")'.format(k_d[1]) in line:
+                        return 'show {} {}'.format(k_d[0], k_d[1])
+                return 'show {} {}'.format(al[0], alid[1])
         else:
             return line
 
