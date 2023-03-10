@@ -51,6 +51,15 @@ class HBNBCommand(cmd.Cmd):
                     if k_d[0] in line and 'show("{}")'.format(k_d[1]) in line:
                         return 'show {} {}'.format(k_d[0], k_d[1])
                 return 'show {} {}'.format(al[0], alid[1])
+            if "count()" in line:
+                sp = line.split('.')
+                count = 0
+                for k in d.keys():
+                    if sp[0] in k:
+                        count = count + 1
+                print(count)
+                return ""
+
         else:
             return line
 
