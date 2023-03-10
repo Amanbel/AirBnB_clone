@@ -67,6 +67,21 @@ class HBNBCommand(cmd.Cmd):
                     if (k_d[0] in line) and (k_d[1] in line):
                         return 'destroy {} {}'.format(k_d[0], k_d[1])
                 return 'destroy {} {}'.format(sp[0], spid[1])
+            if "update" in line:
+                sp = line.split('.')
+                sp2 = sp[1].split(' ')
+                args = sp2[1].split("\"")
+                args2 = sp2[2].split("\"")
+                attr1 = args[1]
+                attr2 = args2[1]
+                spid = sp2[0].split("\"")
+                id_attr = spid[1]
+                for kd in d.keys():
+                    k_d = kd.split('.')
+                    if (sp[0] == k_d[0]) and (k_d[1] == id_attr):
+                        return "update {} {} {} {}".format(k_d[0], k_d[1], attr1, attr2)
+                return "update {} {} {} {}".format(sp[0], id_attr, attr1, attr2)
+
 
         else:
             return line
@@ -218,6 +233,7 @@ class HBNBCommand(cmd.Cmd):
                             with open('file.json', 'w') as f:
                                 json.dump(d, f)
                             return
+                    print("** no insatance found **")
 
     def do_EOF(self, line=None):
         """the end of line method of Cmd"""
