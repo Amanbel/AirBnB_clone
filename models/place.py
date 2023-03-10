@@ -1,5 +1,7 @@
 #!/usr/bin/python3
-from base_model import BaseModel
+from models.base_model import BaseModel
+from models import storage
+import datetime
 
 
 class Place(BaseModel):
@@ -14,3 +16,4 @@ class Place(BaseModel):
     latitude = 0.0
     longitude = 0.0
     amenity_ids = []
+

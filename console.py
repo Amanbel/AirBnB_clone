@@ -4,10 +4,25 @@ import cmd
 import readline
 import models.base_model as Base
 import models.user as Use
+import models.city as city
+import models.amenity as amenity
+import models.review as review
+import models.place as place
+import models.state as state
 import json
 import datetime
 import py_func
 from models import storage
+
+dict_cls = {
+        'BaseModel': Base.BaseModel,
+        'User': Use.User,
+        'City': city.City,
+        'Amenity': amenity.Amenity, 
+        'Review': review.Review, 
+        'Place': place.Place,
+        'State': state.State
+        }
 
 
 class HBNBCommand(cmd.Cmd):
@@ -21,16 +36,15 @@ class HBNBCommand(cmd.Cmd):
         if line == "":
             print("** class name missing **")
 
-        elif line != 'BaseModel' and line != 'User':
+        elif line not in dict_cls.keys():
             print("** class doesn't exist **")
-        elif line == 'BaseModel':
-            inst = Base.BaseModel()
-            inst.save()
-            print(inst.id)
-        elif line == 'User':
-            inst = Use.User()
-            inst.save()
-            print(inst.id)
+            return
+        for k, v in dict_cls.items():
+            if k == line:
+                inst = v()
+                inst.save()
+                print(inst.id)
+                break
 
     def do_show(self, line):
         if line == "":
@@ -39,7 +53,7 @@ class HBNBCommand(cmd.Cmd):
         
         cls_id = line.split()
 
-        if cls_id[0] != 'BaseModel' and cls_id[0] != 'User':
+        if cls_id[0] not in dict_cls.keys():
             print("** class doesn't exist **")
 
         elif len(cls_id) != 2:
@@ -64,7 +78,7 @@ class HBNBCommand(cmd.Cmd):
         else:
             cls_id = line.split()
 
-            if cls_id[0] != 'BaseModel' and cls_id[0] != 'User':
+            if cls_id[0] not in dict_cls.keys():
                 print("** class doesn't exist **")
             elif len(cls_id) != 2:
                 print("** instance id missing **")
@@ -87,7 +101,8 @@ class HBNBCommand(cmd.Cmd):
                             return
 
     def do_all(self, line):
-        if (line == 'BaseModel' or line == 'User') or line == "":
+        if line in dict_cls.keys() or line == "":
+            d = {}
             try:
                 with open('file.json', 'r') as f:
                     d = json.load(f)
@@ -109,11 +124,11 @@ class HBNBCommand(cmd.Cmd):
         else:
             upvar = line.split()
 
-            if upvar[0] != 'BaseModel' and upvar[0] != 'User':
+            if upvar[0] not in dict_cls.keys():
                 print("** class doesn't exist **")
             elif len(upvar) < 2:
                 print("** instance id missing **")
-            elif upvar[0] == 'BaseModel' or upvar[0] == 'User':
+            elif upvar[0] in dict_cls.keys():
                 if len(upvar) < 3:
                     print("** attribute name missing **")
                     return
@@ -152,8 +167,10 @@ class HBNBCommand(cmd.Cmd):
                             dump_dict = json.dumps(dict_str, default=py_func.time_form)
                             load_dict = json.loads(dump_dict)
                             load_dict.update({attr_k: attr_v})
-
-                            inst = Base.BaseModel(**load_dict)
+                            
+                            for ky, vl in dict_cls.items():
+                                if upvar[0] == ky:
+                                    inst = vl(**load_dict)
 
                             d[key] = str(inst)
                             with open('file.json', 'w') as f:

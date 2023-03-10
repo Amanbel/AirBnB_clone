@@ -9,19 +9,7 @@ else:
     from models import storage
 
 class User(BaseModel):
-    
-    def __init__(self):
-        super().__init__()
-        self.email = ""
-        self.password = ""
-        self.first_name = ""
-        self.last_name = ""
-
-    def __str__(self):
-        return "[{}] ({})\
- {}".format(self.__class__.__name__, self.id, self.__dict__)
-
-    def save(self):
-        storage.new(self)
-        self.update_at = datetime.datetime.now()
-        storage.save()
+    email = ""
+    password = ""
+    first_name = ""
+    last_name = ""
