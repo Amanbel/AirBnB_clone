@@ -59,6 +59,14 @@ class HBNBCommand(cmd.Cmd):
                         count = count + 1
                 print(count)
                 return ""
+            if "destroy" in line:
+                sp = line.split('.')
+                spid = sp[1].split("\"")
+                for kd in d.keys():
+                    k_d = kd.split('.')
+                    if (k_d[0] in line) and (k_d[1] in line):
+                        return 'destroy {} {}'.format(k_d[0], k_d[1])
+                return 'destroy {} {}'.format(sp[0], spid[1])
 
         else:
             return line
@@ -130,6 +138,7 @@ class HBNBCommand(cmd.Cmd):
                             with open('file.json', 'w') as FILE:
                                 json.dump(dict_all, FILE)
                             return
+                    print("** no instance found **")
 
     def do_all(self, line):
         if line in dict_cls.keys() or line == "":
