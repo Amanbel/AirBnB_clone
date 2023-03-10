@@ -11,7 +11,7 @@ import models.place as place
 import models.state as state
 import json
 import datetime
-import py_func
+import utils
 from models import storage
 
 dict_cls = {
@@ -70,17 +70,30 @@ class HBNBCommand(cmd.Cmd):
             if "update" in line:
                 sp = line.split('.')
                 sp2 = sp[1].split(' ')
-                args = sp2[1].split("\"")
-                args2 = sp2[2].split("\"")
-                attr1 = args[1]
-                attr2 = args2[1]
-                spid = sp2[0].split("\"")
-                id_attr = spid[1]
-                for kd in d.keys():
-                    k_d = kd.split('.')
-                    if (sp[0] == k_d[0]) and (k_d[1] == id_attr):
-                        return "update {} {} {} {}".format(k_d[0], k_d[1], attr1, attr2)
-                return "update {} {} {} {}".format(sp[0], id_attr, attr1, attr2)
+                
+                if "{" in line:
+                    once = line.split(' ', 1)
+                    id_list = once[0].split('"')
+                    id_attr = id_list[1]
+                    str_dict = once[1].split('{}')
+                    for kd in d.keys():
+                        k_d = kd.split('.')
+                        if (sp[0] == k_d[0]) and (k_d[1] == id_attr):
+                            return "update {} {} {}".format(k_d[0], k_d[1], str_dict[0])
+                    return "update {} {} {}".format(sp[0], id_attr, str_dict[0])
+                    # pass in the dictionary
+                else:
+                    args = sp2[1].split("\"")
+                    args2 = sp2[2].split("\"")
+                    attr1 = args[1]
+                    attr2 = args2[1]
+                    spid = sp2[0].split("\"")
+                    id_attr = spid[1]
+                    for kd in d.keys():
+                        k_d = kd.split('.')
+                        if (sp[0] == k_d[0]) and (k_d[1] == id_attr):
+                            return "update {} {} {} {}".format(k_d[0], k_d[1], attr1, attr2)
+                    return "update {} {} {} {}".format(sp[0], id_attr, attr1, attr2)
 
 
         else:
@@ -201,29 +214,34 @@ class HBNBCommand(cmd.Cmd):
                         if k == key:
                             d = storage.all()
                             args = line.split()
+                            dict_chk = line.split(' ', 2)
                             for i in range(len(args[1:]) + 1):
                                 if args[i][0] == '"':
                                     args[i] = args[i].replace('"', "")
                                 elif args[i][0] == "'":
                                     args[i] = args[i].replace("'", "")
                             key = args[0] + '.' + args[1]
-                            attr_k = args[2]
-                            attr_v = args[3]
-                            try:
-                                if attr_v.isdigit():
-                                    attr_v = int(attr_v)
-                                elif float(attr_v):
-                                    attr_v = float(attr_v)
-                            except ValueError:
-                                pass
-                            
+                            if dict_chk[2][0] == "{":
+                                rep = dict_chk[2].replace("'", "\"")
+                                to_dict = json.loads(rep)
+                                """
+                                for k, v in to_dict.items():
+                                    to_dict[k] = utils.type_conv(v)
+                                """
+                                # update the dictionary input here
+                            else:
+                                attr_k = args[2]
+                                attr_v = args[3]
+
+                                attr_v = utils.type_conv(attr_v)
+                                to_dict = {attr_k: attr_v}
 
                             spl = v.split(' ', 2)
                             dict_str = eval(spl[2])
                             
-                            dump_dict = json.dumps(dict_str, default=py_func.time_form)
+                            dump_dict = json.dumps(dict_str, default=utils.time_form)
                             load_dict = json.loads(dump_dict)
-                            load_dict.update({attr_k: attr_v})
+                            load_dict.update(to_dict)
                             
                             for ky, vl in dict_cls.items():
                                 if upvar[0] == ky:
@@ -249,3 +267,4 @@ class HBNBCommand(cmd.Cmd):
 
 if __name__ == "__main__":
     HBNBCommand().cmdloop()
+
