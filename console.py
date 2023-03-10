@@ -32,6 +32,15 @@ class HBNBCommand(cmd.Cmd):
 
     prompt = "(hbnb) "
 
+    def precmd(self, line):
+        if '.' in line:
+            for k in dict_cls.keys():
+                if (k in line) and ('all()' in line):
+                    return 'all {}'.format(k)
+            return line
+        else:
+            return line
+
     def do_create(self, line):
         if line == "":
             print("** class name missing **")
