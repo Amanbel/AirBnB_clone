@@ -7,6 +7,7 @@ from models import storage
 
 class BaseModel():
     """base class"""
+
     def __init__(self, *args, **kwargs):
         """instantiates an object with the values provided"""
         if len(kwargs) != 0:
