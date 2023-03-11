@@ -1,15 +1,25 @@
 #!/usr/bin/python3
-"""the base class of the project"""
+"""the base module of the project
+that enables us to create the initial
+starting point of the data construction
+"""
+
 import datetime
 import uuid
 from models import storage
 
 
 class BaseModel():
-    """base class"""
+    """the base class of the project
+which contain all the fundamental
+attributes needed
+    """
 
     def __init__(self, *args, **kwargs):
-        """instantiates an object with the values provided"""
+        """instantiates an object with the values provided
+to the class or creates the values it self incase the data
+isn't provided
+        """
         if len(kwargs) != 0:
             for k, v in kwargs.items():
                 if k == 'created_at':
@@ -27,17 +37,24 @@ class BaseModel():
             storage.new(self)
 
     def __str__(self):
-        """returns a readable string"""
+        """returns a readable string for users or
+developers to investigate the data that has been manifested
+        """
         return "[{}] ({})\
  {}".format(self.__class__.__name__, self.id, self.__dict__)
 
     def save(self):
-        """updates the update_at attribute"""
+        """updates the update_at attribute and saves the attributes
+in this class to a private class attribute in the FileStorage module
+        """
         self.updated_at = datetime.datetime.now()
         storage.save()
 
     def to_dict(self):
-        """returns the dictionary form of the instance"""
+        """returns the dictionary form of the instance with a tweak
+in the 'created_at' and 'updated_at' attributes, and the method adds the name
+of the class it came from
+        """
         dict_t = self.__dict__.copy()
         dict_t.update({
             '__class__': self.__class__.__name__,
