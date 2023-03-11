@@ -15,4 +15,3 @@ def type_conv(arg):
             return float(arg)
     except ValueError:
         return arg
-
