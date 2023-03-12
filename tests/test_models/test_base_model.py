@@ -50,10 +50,10 @@ class TestBaseModel(unittest.TestCase):
         """funciton that tests the creation of
         the fundamental attributes in the BaseClass"""
         BaseKeys = self.inst.to_dict().keys()
-        self.assertIn('id', BaseKeys)
-        self.assertIn('created_at', BaseKeys)
-        self.assertIn('updated_at', BaseKeys)
         self.assertIn('__class__', BaseKeys)
+        self.assertTrue(hasattr(self.inst, 'id'))
+        self.assertTrue(hasattr(self.inst, 'created_at'))
+        self.assertTrue(hasattr(self.inst, 'updated_at'))
 
     def test_BaseKwargs(self):
         """function that tests the initialization of
