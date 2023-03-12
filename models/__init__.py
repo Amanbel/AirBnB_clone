@@ -1,9 +1,8 @@
-"""init module"""
+"""the packege for the BaseModel class and its
+    subclass
+"""
+from models.engine.file_storage import FileStorage
 
-if __name__ == 'models':
-    from models.engine.file_storage import FileStorage
-else:
-    from engine.file_storage import FileStorage
 
 storage = FileStorage()
 storage.reload()
