@@ -7,6 +7,9 @@ import os
 import json
 from models.engine.file_storage import FileStorage
 from models.base_model import BaseModel
+from models import storage
+from models.user import User
+from models.engine import file_storage
 
 
 class TestFileStorage(unittest.TestCase):
