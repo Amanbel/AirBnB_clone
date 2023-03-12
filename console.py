@@ -76,11 +76,12 @@ class HBNBCommand(cmd.Cmd):
                     id_list = once[0].split('"')
                     id_attr = id_list[1]
                     str_dict = once[1].split('{}')
+                    in_dict = str_dict[0].replace(")", "")
                     for kd in d.keys():
                         k_d = kd.split('.')
                         if (sp[0] == k_d[0]) and (k_d[1] == id_attr):
-                            return "update {} {} {}".format(k_d[0], k_d[1], str_dict[0])
-                    return "update {} {} {}".format(sp[0], id_attr, str_dict[0])
+                            return "update {} {} {}".format(k_d[0], k_d[1], in_dict)
+                    return "update {} {} {}".format(sp[0], id_attr, in_dict)
                     # pass in the dictionary
                 else:
                     args = sp2[1].split("\"")
