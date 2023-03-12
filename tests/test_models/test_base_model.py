@@ -68,3 +68,7 @@ class TestBaseModel(unittest.TestCase):
         self.assertIn('name', new_Base_keys)
         self.assertIn('age', new_Base_keys)
         self.assertNotEqual(Base_dict['__class__'], Base_new['__class__'])
+
+
+if __name__ == "__main__":
+    unittest.main()
