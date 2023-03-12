@@ -12,7 +12,7 @@ class FileStorage():
 
     def all(self):
         """returns a dictionary of all the objects with
-        the key <class name>.id and a value of 
+        the key <class name>.id and a value of
         the string return of the object
         """
         return type(self).__objects
