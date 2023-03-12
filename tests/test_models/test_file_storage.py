@@ -20,6 +20,10 @@ class TestFileStorage(unittest.TestCase):
         before every test is called"""
         self.inst = FileStorage()
 
+    def tearDown(self):
+        """runs after every test is called"""
+        pass
+
     def test_FileStorageSave(self):
         """tests the save() method inside the
         FileStorage class, to see if it can save the
@@ -73,3 +77,6 @@ class TestFileStorage(unittest.TestCase):
         self.inst.reload()
         all_dict = self.inst.all().values()
         self.assertIn(str(Base_new), all_dict)
+
+if __name__ == "__main__":
+    unittest.main()
