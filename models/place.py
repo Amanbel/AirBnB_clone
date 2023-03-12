@@ -5,8 +5,8 @@ import datetime
 
 
 class Place(BaseModel):
-    class_id = ""
-    class_id = ""
+    city_id = ""
+    user_id = ""
     name = ""
     description = ""
     number_rooms = 0
