@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 """unittest module"""
 import unittest
+import uuid
 from models.base_model import BaseModel
 import datetime
 
@@ -18,6 +19,19 @@ class TestBaseModel(unittest.TestCase):
         """function called after every test
         function"""
         pass
+
+    def test_base_model_uuid_good_format(self):
+        """
+        Tests if UUID is in the correct format."""
+        bm = BaseModel()
+        self.assertIsInstance(uuid.UUID(bm.id), uuid.UUID)
+
+    def test_base_model_id_is_string(self):
+        """UUID format testing.
+        This test is designed to check if any generated UUID
+        is correctly generated and has the propper format."""
+        bm = BaseModel()
+        self.assertIsInstance(bm.id, str)
 
     def test_isBaseExist(self):
         """function to test the initialization of
