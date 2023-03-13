@@ -18,8 +18,8 @@ dict_cls = {
         'BaseModel': Base.BaseModel,
         'User': Use.User,
         'City': city.City,
-        'Amenity': amenity.Amenity, 
-        'Review': review.Review, 
+        'Amenity': amenity.Amenity,
+        'Review': review.Review,
         'Place': place.Place,
         'State': state.State
         }
@@ -33,6 +33,8 @@ class HBNBCommand(cmd.Cmd):
     prompt = "(hbnb) "
 
     def precmd(self, line):
+        """precommand is a funciton that processes lines given with
+        the command before it reaches onecmd function"""
         if '.' in line:
             if 'all()' in line:
                 al = line.split('.')
@@ -70,7 +72,6 @@ class HBNBCommand(cmd.Cmd):
             if "update" in line:
                 sp = line.split('.')
                 sp2 = sp[1].split(' ')
-                
                 if "{" in line:
                     once = line.split(' ', 1)
                     id_list = once[0].split('"')
@@ -80,8 +81,10 @@ class HBNBCommand(cmd.Cmd):
                     for kd in d.keys():
                         k_d = kd.split('.')
                         if (sp[0] == k_d[0]) and (k_d[1] == id_attr):
-                            return "update {} {} {}".format(k_d[0], k_d[1], in_dict)
-                    return "update {} {} {}".format(sp[0], id_attr, in_dict)
+                            return "update {} {} \
+{}".format(k_d[0], k_d[1], in_dict)
+                    return "update {} {} \
+{}".format(sp[0], id_attr, in_dict)
                     # pass in the dictionary
                 else:
                     args = sp2[1].split("\"")
@@ -93,14 +96,17 @@ class HBNBCommand(cmd.Cmd):
                     for kd in d.keys():
                         k_d = kd.split('.')
                         if (sp[0] == k_d[0]) and (k_d[1] == id_attr):
-                            return "update {} {} {} {}".format(k_d[0], k_d[1], attr1, attr2)
-                    return "update {} {} {} {}".format(sp[0], id_attr, attr1, attr2)
-
+                            return "update {} {} {} \
+{}".format(k_d[0], k_d[1], attr1, attr2)
+                    return "update {} {} {} \
+{}".format(sp[0], id_attr, attr1, attr2)
 
         else:
             return line
 
     def do_create(self, line):
+        """command that creates an instance of the specified class
+        and saves on to the file.json file"""
         if line == "":
             print("** class name missing **")
 
@@ -115,10 +121,12 @@ class HBNBCommand(cmd.Cmd):
                 break
 
     def do_show(self, line):
+        """command that shows a specific data of a user or a subclass of
+        BaseModel class, or BaseModel itself"""
         if line == "":
             print("** class name missing **")
             return
-        
+
         cls_id = line.split()
 
         if cls_id[0] not in dict_cls.keys():
@@ -141,6 +149,7 @@ class HBNBCommand(cmd.Cmd):
             print("** no instance found **")
 
     def do_destroy(self, line):
+        """command that destorys a saved data on file.json"""
         if line == "":
             print("** class name missing **")
         else:
@@ -170,6 +179,9 @@ class HBNBCommand(cmd.Cmd):
                     print("** no instance found **")
 
     def do_all(self, line):
+        """shows all created instances of every class if there is no
+        argument provided, if the a specific class is provided as an
+        argument it shows all instances of that class"""
         if line in dict_cls.keys() or line == "":
             d = {}
             try:
@@ -188,6 +200,8 @@ class HBNBCommand(cmd.Cmd):
             print("** class doesn't exist **")
 
     def do_update(self, line):
+        """command that updates a specific inctance of a class
+        if the id is provided with the class name"""
         if line == "":
             print("** class name missing **")
         else:
