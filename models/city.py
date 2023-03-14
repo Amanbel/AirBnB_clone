@@ -7,4 +7,3 @@ import datetime
 class City(BaseModel):
     state_id = ""
     name = ""
-

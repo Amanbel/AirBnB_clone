@@ -7,6 +7,7 @@ def time_form(obj):
     if isinstance(obj, datetime.datetime):
         return obj.strftime('%Y-%m-%dT%H:%M:%S.%f')
 
+
 def type_conv(arg):
     try:
         if arg.isdigit():

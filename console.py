@@ -194,8 +194,7 @@ class HBNBCommand(cmd.Cmd):
                 return
             else:
                 args = line.split()
-                print([str(v) for k, v in d.items()
-                    if args[0] in k])
+                print([str(v) for k, v in d.items() if args[0] in k])
         else:
             print("** class doesn't exist **")
 
@@ -253,11 +252,11 @@ class HBNBCommand(cmd.Cmd):
 
                             spl = v.split(' ', 2)
                             dict_str = eval(spl[2])
-                            
-                            dump_dict = json.dumps(dict_str, default=utils.time_form)
-                            load_dict = json.loads(dump_dict)
+
+                            dum = json.dumps(dict_str, default=utils.time_form)
+                            load_dict = json.loads(dum)
                             load_dict.update(to_dict)
-                            
+
                             for ky, vl in dict_cls.items():
                                 if upvar[0] == ky:
                                     inst = vl(**load_dict)
@@ -282,4 +281,3 @@ class HBNBCommand(cmd.Cmd):
 
 if __name__ == "__main__":
     HBNBCommand().cmdloop()
-
