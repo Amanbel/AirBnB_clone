@@ -25,3 +25,6 @@ for example:
 * do_EOF
 
 with this methods we can get the basic functionality of the console
+
+## web static
+this section of the whole web site covers the user interface and astetics of the site enabling the user to easly interact with the web site and its functions
